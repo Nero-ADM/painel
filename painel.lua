@@ -87,3 +87,18 @@ contentHolder.Position = UDim2.new(0, 140, 0, 30)
 contentHolder.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 contentHolder.BorderSizePixel = 0
 contentHolder.Name = "ContentHolder"
+
+-- Função para criar botões de aba
+local function createTabButton(name, order)
+	local btn = Instance.new("TextButton")
+	btn.Name = name.."Tab"
+	btn.Text = name
+	btn.Font = Enum.Font.Gotham
+	btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+	btn.TextSize = 16
+	btn.Size = UDim2.new(0, 100, 1, 0)
+	btn.Position = UDim2.new(0, (order-1)*110, 0, 0)
+	btn.BackgroundTransparency = 1
+	btn.Parent = tabsHolder
+	return btn
+end
