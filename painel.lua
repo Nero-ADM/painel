@@ -102,3 +102,34 @@ local function createTabButton(name, order)
 	btn.Parent = tabsHolder
 	return btn
 end
+
+-- Função para criar o conteúdo de cada aba
+local function createTabContent(name)
+	local frame = Instance.new("Frame")
+	frame.Name = name.."Content"
+	frame.Size = UDim2.new(1, 0, 1, 0)
+	frame.BackgroundTransparency = 0
+	frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	frame.Visible = false
+	frame.Parent = contentHolder
+
+	local label = Instance.new("TextLabel", frame)  
+	label.Text = "Conteúdo da aba " .. name  
+	label.Size = UDim2.new(1, 0, 0, 30)  
+	label.Position = UDim2.new(0, 0, 0, 0)  
+	label.Font = Enum.Font.GothamBold  
+	label.TextSize = 20  
+	label.TextColor3 = Color3.fromRGB(255, 255, 255)  
+	label.BackgroundTransparency = 1  
+	label.TextXAlignment = Enum.TextXAlignment.Left  
+
+	return frame
+end
+
+-- Lista de abas
+local tabs = {
+	{ Name = "Top Scripts", Order = 1 },
+	{ Name = "Visual", Order = 2 },
+	{ Name = "Utils", Order = 3 },
+	{ Name = "Troll", Order = 4 },
+}
