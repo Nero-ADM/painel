@@ -19,7 +19,7 @@ mainFrame.ClipsDescendants = true
 mainFrame.Parent = gui
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0,12)
 
--- Gradiente principal (vermelho -> preto)
+-- Gradiente principal
 local gradient = Instance.new("UIGradient", mainFrame)
 gradient.Color = ColorSequence.new{
 	ColorSequenceKeypoint.new(0, Color3.fromRGB(255,0,0)),
@@ -27,21 +27,7 @@ gradient.Color = ColorSequence.new{
 }
 gradient.Rotation = 90
 
--- Animação do gradiente
-task.spawn(function()
-	while mainFrame.Parent do
-		for i=0,1,0.01 do
-			gradient.Offset = Vector2.new(0,i)
-			task.wait(0.03)
-		end
-		for i=1,0,-0.01 do
-			gradient.Offset = Vector2.new(0,i)
-			task.wait(0.03)
-		end
-	end
-end)
-
--- Partículas de brilho no fundo
+-- Partículas
 local particles = Instance.new("ParticleEmitter", mainFrame)
 particles.Rate = 5
 particles.Lifetime = NumberRange.new(2,3)
@@ -50,25 +36,6 @@ particles.Speed = NumberRange.new(5,10)
 particles.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0,0.2),NumberSequenceKeypoint.new(1,0.8)})
 particles.Color = ColorSequence.new(Color3.fromRGB(255,0,0))
 particles.Acceleration = Vector3.new(0,-10,0)
-particles.Rotation = NumberRange.new(0,360)
-particles.RotSpeed = NumberRange.new(-90,90)
-
--- Partículas seguindo o mouse
-local mouse = player:GetMouse()
-local mouseParticles = Instance.new("ParticleEmitter", mainFrame)
-mouseParticles.Rate = 10
-mouseParticles.Lifetime = NumberRange.new(0.2,0.5)
-mouseParticles.Speed = NumberRange.new(0,0)
-mouseParticles.Size = NumberSequence.new(0.15)
-mouseParticles.Transparency = NumberSequence.new(0.5)
-mouseParticles.Color = ColorSequence.new(Color3.fromRGB(255,50,50))
-mouseParticles.EmissionDirection = Enum.NormalId.Top
-
-task.spawn(function()
-	while task.wait(0.03) do
-		mouseParticles.Position = UDim2.new(0,mouse.X - mainFrame.AbsolutePosition.X,0,mouse.Y - mainFrame.AbsolutePosition.Y)
-	end
-end)
 
 -- Título
 local title = Instance.new("TextLabel", mainFrame)
@@ -82,7 +49,7 @@ title.BackgroundTransparency = 1
 title.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Botões fechar e minimizar
-local function createButton(text, posX)
+local function createButton(text,posX)
 	local btn = Instance.new("TextButton", mainFrame)
 	btn.Text = text
 	btn.Font = Enum.Font.GothamBold
@@ -93,7 +60,6 @@ local function createButton(text, posX)
 	btn.BackgroundTransparency = 1
 	return btn
 end
-
 local closeBtn = createButton("×",50)
 closeBtn.MouseButton1Click:Connect(function()
 	gui:Destroy()
@@ -145,21 +111,19 @@ local tabs = {
 	{Name="Troll", Order=4},
 }
 local currentTab = nil
-local indicator = Instance.new("Frame", tabsHolder)
-indicator.Size = UDim2.new(1,0,0,35)
-indicator.BackgroundColor3 = Color3.fromRGB(255,0,0)
-indicator.ZIndex = 1
-Instance.new("UICorner", indicator).CornerRadius = UDim.new(0,8)
 
--- Função criar conteúdo
+-- Função criar conteúdo com borda arredondada
 local function createTabContent(name)
 	local frame = Instance.new("Frame")
 	frame.Name = name.."Content"
 	frame.Size = UDim2.new(1,0,1,0)
 	frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
-	frame.BackgroundTransparency = 1
+	frame.BackgroundTransparency = 0
 	frame.Visible = false
 	frame.Parent = contentHolder
+	-- UICorner
+	local corner = Instance.new("UICorner", frame)
+	corner.CornerRadius = UDim.new(0,10)
 
 	local label = Instance.new("TextLabel", frame)
 	label.Text = "Conteúdo da aba "..name
@@ -174,7 +138,7 @@ local function createTabContent(name)
 	return frame
 end
 
--- Função criar botão
+-- Função criar botão aba
 local function createTabButton(name,order)
 	local btn = Instance.new("TextButton")
 	btn.Name = name.."Tab"
@@ -187,7 +151,8 @@ local function createTabButton(name,order)
 	btn.BackgroundColor3 = Color3.fromRGB(50,50,50)
 	btn.BorderSizePixel = 0
 	btn.Parent = tabsHolder
-	Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
+	local corner = Instance.new("UICorner", btn)
+	corner.CornerRadius = UDim.new(0,8)
 
 	-- Hover efeito
 	btn.MouseEnter:Connect(function()
@@ -206,31 +171,22 @@ local function createTabButton(name,order)
 	return btn
 end
 
--- Alternar abas com fade e glow
+-- Alternar abas
 local function switchTab(name)
 	if currentTab then
 		local old = contentHolder:FindFirstChild(currentTab.."Content")
 		if old then
-			TweenService:Create(old,TweenInfo.new(0.3),{BackgroundTransparency=1}):Play()
-			task.wait(0.3)
 			old.Visible = false
 		end
 	end
 	local newTab = contentHolder:FindFirstChild(name.."Content")
 	if newTab then
 		newTab.Visible = true
-		newTab.BackgroundTransparency = 1
-		TweenService:Create(newTab,TweenInfo.new(0.3),{BackgroundTransparency=0}):Play()
 		currentTab = name
-		for i,tab in pairs(tabs) do
-			if tab.Name == name then
-				TweenService:Create(indicator,TweenInfo.new(0.2),{Position=UDim2.new(0,0,0,(tab.Order-1)*40)}):Play()
-			end
-		end
 	end
 end
 
--- Criar abas e conteúdo
+-- Criar todas abas e conteúdo
 for _,tab in pairs(tabs) do
 	createTabContent(tab.Name)
 	createTabButton(tab.Name,tab.Order)
