@@ -6,12 +6,6 @@ gui.Name = "Oren Client"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- GUI
-local gui = Instance.new("ScreenGuI")
-gui.Name = "Oren Client"
-gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
-
 -- Título
 local title = Instance.new("TextLabel", mainFrame)
 title.Text = "Oren Client | Portugues | Brookhave"
