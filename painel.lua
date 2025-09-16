@@ -8,8 +8,8 @@ gui.Parent = player:WaitForChild("PlayerGui")
 
 -- Painel principal
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0,620,0,320)
-mainFrame.Position = UDim2.new(0.5,-310,0.5,-160)
+mainFrame.Size = UDim2.new(0,600,0,300) -- painel um pouco menor
+mainFrame.Position = UDim2.new(0.5,-300,0.5,-150)
 mainFrame.BackgroundColor3 = Color3.fromRGB(0,0,0)
 mainFrame.BorderSizePixel = 0
 mainFrame.AnchorPoint = Vector2.new(0.5,0.5)
@@ -38,13 +38,13 @@ end)
 
 -- Partículas melhoradas
 local particles = Instance.new("ParticleEmitter", mainFrame)
-particles.Rate = 8
+particles.Rate = 6
 particles.Lifetime = NumberRange.new(2,3)
 particles.Size = NumberSequence.new({NumberSequenceKeypoint.new(0,0.2),NumberSequenceKeypoint.new(1,0.5)})
 particles.Speed = NumberRange.new(5,12)
 particles.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0,0.2),NumberSequenceKeypoint.new(1,1)})
 particles.Color = ColorSequence.new(Color3.fromRGB(255,0,0))
-particles.Acceleration = Vector3.new(0,-20,0)
+particles.Acceleration = Vector3.new(0,-15,0)
 particles.Rotation = NumberRange.new(0,360)
 particles.RotSpeed = NumberRange.new(-90,90)
 
@@ -54,21 +54,21 @@ title.Text = "Oren Client | Português | Brookhaven"
 title.Font = Enum.Font.GothamBold
 title.TextColor3 = Color3.fromRGB(255,255,255)
 title.TextSize = 20
-title.Size = UDim2.new(1,-20,0,40)
+title.Size = UDim2.new(1,-20,0,30)
 title.Position = UDim2.new(0,10,0,10)
 title.BackgroundTransparency = 1
 title.TextXAlignment = Enum.TextXAlignment.Left
 
--- Barra lateral
+-- Barra lateral (esquerda)
 local tabsHolder = Instance.new("Frame", mainFrame)
-tabsHolder.Size = UDim2.new(0,120,1,-40)
-tabsHolder.Position = UDim2.new(0,10,0,30)
+tabsHolder.Size = UDim2.new(0,120,1,-60) -- menor altura para não sobrepor título
+tabsHolder.Position = UDim2.new(0,10,0,50) -- abaixo do título
 tabsHolder.BackgroundTransparency = 1
 
 -- Área de conteúdo
 local contentHolder = Instance.new("Frame", mainFrame)
 contentHolder.Size = UDim2.new(1,-150,1,-60)
-contentHolder.Position = UDim2.new(0,140,0,30)
+contentHolder.Position = UDim2.new(0,140,0,50)
 contentHolder.BackgroundColor3 = Color3.fromRGB(20,20,20)
 contentHolder.BorderSizePixel = 0
 
@@ -86,7 +86,7 @@ local function createTabContent(name)
 	frame.Name = name.."Content"
 	frame.Size = UDim2.new(1,0,1,0)
 	frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
-	frame.BackgroundTransparency = 1 -- inicia invisível
+	frame.BackgroundTransparency = 1
 	frame.Visible = false
 	frame.Parent = contentHolder
 
@@ -95,7 +95,7 @@ local function createTabContent(name)
 	label.Size = UDim2.new(1,0,0,30)
 	label.Position = UDim2.new(0,0,0,0)
 	label.Font = Enum.Font.GothamBold
-	label.TextSize = 20
+	label.TextSize = 18
 	label.TextColor3 = Color3.fromRGB(255,255,255)
 	label.BackgroundTransparency = 1
 	label.TextXAlignment = Enum.TextXAlignment.Left
@@ -103,7 +103,7 @@ local function createTabContent(name)
 	-- Exemplo de botão Utils
 	if name=="Utils" then
 		local btn = Instance.new("TextButton", frame)
-		btn.Size = UDim2.new(0,150,0,40)
+		btn.Size = UDim2.new(0,140,0,35)
 		btn.Position = UDim2.new(0,10,0,50)
 		btn.Text = "Ativar Script"
 		btn.Font = Enum.Font.GothamBold
@@ -127,8 +127,8 @@ local function createTabButton(name, order)
 	btn.Font = Enum.Font.Gotham
 	btn.TextColor3 = Color3.fromRGB(200,200,200)
 	btn.TextSize = 16
-	btn.Size = UDim2.new(1,0,0,40)
-	btn.Position = UDim2.new(0,0,0,(order-1)*50)
+	btn.Size = UDim2.new(1,0,0,35) -- aba menor
+	btn.Position = UDim2.new(0,0,0,(order-1)*40) -- espaçamento reduzido
 	btn.BackgroundTransparency = 1
 	btn.Parent = tabsHolder
 
@@ -174,53 +174,3 @@ end
 
 -- Ativar aba padrão
 switchTab("Top Scripts")
-
--- Botões fechar/minimizar
-local closeBtn = Instance.new("TextButton", mainFrame)
-closeBtn.Text = "×"
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.TextSize = 28
-closeBtn.TextColor3 = Color3.fromRGB(255,100,100)
-closeBtn.Size = UDim2.new(0,40,0,40)
-closeBtn.Position = UDim2.new(1,-45,0,5)
-closeBtn.BackgroundTransparency = 1
-
-local minimizeBtn = Instance.new("TextButton", mainFrame)
-minimizeBtn.Text = "-"
-minimizeBtn.Font = Enum.Font.GothamBold
-minimizeBtn.TextSize = 28
-minimizeBtn.TextColor3 = Color3.fromRGB(255,100,100)
-minimizeBtn.Size = UDim2.new(0,40,0,40)
-minimizeBtn.Position = UDim2.new(1,-90,0,5)
-minimizeBtn.BackgroundTransparency = 1
-
-local isMinimized = false
-local logoBtn = Instance.new("TextButton", gui)
-logoBtn.Text = "Oren"
-logoBtn.Size = UDim2.new(0,60,0,60)
-logoBtn.Position = UDim2.new(0,20,1,-80)
-logoBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
-logoBtn.Visible = false
-Instance.new("UICorner", logoBtn).CornerRadius = UDim.new(0,14)
-
-minimizeBtn.MouseButton1Click:Connect(function()
-	if isMinimized then
-		mainFrame.Visible=true
-		logoBtn.Visible=false
-		isMinimized=false
-	else
-		mainFrame.Visible=false
-		logoBtn.Visible=true
-		isMinimized=true
-	end
-end)
-
-logoBtn.MouseButton1Click:Connect(function()
-	mainFrame.Visible=true
-	logoBtn.Visible=false
-end)
-
-closeBtn.MouseButton1Click:Connect(function()
-	gui:Destroy()
-	logoBtn.Visible=true
-end)
